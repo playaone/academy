@@ -1,5 +1,11 @@
 from flask import Flask
+from app.routes.health import health_bp
+from app.routes.home import home_bp
 
-app = Flask(__name__)
-
-from app import routes
+def create_app():
+    app = Flask(__name__)
+    
+    app.register_blueprint(home_bp)
+    app.register_blueprint(health_bp)
+        
+    return app
