@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from app.config import Config
-from app.extentions import db
+from app.extensions import db
+from app import models
 
 from app.routes.health import health_bp
 from app.routes.home import home_bp
