@@ -1,8 +1,17 @@
 import os
 
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+INSTANCE_DIR = BASE_DIR / "instance"
+DATABASE_PATH = INSTANCE_DIR / "project.sql"
+
+INSTANCE_DIR.mkdir(parents=True, exist_ok=True)
+
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "development-secret")
-    DEBUG = os.getenv("DEBUG", "False") == "True"
+    DEBUG = os.getenv("DEBUG", "False").lower() == "true"
     
     DB_HOST = os.getenv("DB_HOST")
     DB_PORT = os.getenv("DB_PORT")
@@ -15,6 +24,6 @@ class Config:
     #     f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     # )
     
-    SQLALCHEMY_DATABASE_URI = "sqlite:///project.sql"
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{DATABASE_PATH.as_posix()}"
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
