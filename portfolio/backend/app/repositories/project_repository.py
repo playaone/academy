@@ -6,7 +6,7 @@ class ProjectRepository:
         return Project.query.all()
     
     def get_by_id(self, project_id):
-        return Project.query.get(project_id)
+        return db.session.get(Project, project_id)
     
     def create(self, **data):
         project = Project(**data)
@@ -22,4 +22,13 @@ class ProjectRepository:
         
     def get_by_title(self, title):
         project = Project.query.filter_by(title=title).first()
+        return project
+    
+    def update(self, project, **data):
+        for field, value in data.items():
+            setattr(project, field, value)
+        
+        db.session.commit()
+        db.session.refresh(project)
+        
         return project
