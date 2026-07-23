@@ -1,4 +1,4 @@
-from app.exceptions import ConflictError, ResourceNotFoundError, ValidationError
+from app.exceptions import ConflictError, ResourceNotFoundError, ValidationError, UnsupportedFieldError
 from app.repositories.project_repository import ProjectRepository
 
 class ProjectService:
@@ -54,6 +54,15 @@ class ProjectService:
         project = self.get_project(project_id)
         
         updates = {}
+        
+        data_keys = set(data.keys())
+        project_fields = project.to_dict().keys()
+        
+        unsupported_fields = data_keys - project_fields
+        if unsupported_fields:
+            raise UnsupportedFieldError(
+                f"Unsupported project fields: {', '.join(unsupported_fields)}"
+            )
         
         if "title" in data:
             title = self._clean_required_text(

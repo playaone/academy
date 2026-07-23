@@ -22,69 +22,40 @@ def list_projects():
     
 @projects_bp.get("/<int:project_id>")
 def get_projects(project_id):
-    try:
-        project = service.get_project(project_id)
-        return project.to_dict(), 200
-    
-    except ResourceNotFoundError as error:
-        return {"error": str(error)}, 404
+    project = service.get_project(project_id)
+    return project.to_dict(), 200
     
 @projects_bp.post("")
 def create_project():
-    data = request.get_json(silent=True)
+    data = get_json_body()
     
-    if data is None:
-        return{
-            "error": "Request body must contain valid JSON"
-        }, 400
-        
-    try:
-        project = service.create_project(data)
-        return project.to_dict(), 201
+    project = service.create_project(data)
+    return project.to_dict(), 201
     
-    except ValidationError as error:
-        return {
-            "error": str(error)
-        }, 404
-        
-    except ConflictError as error:
-        return {
-            "error": str(error)
-        }, 409
         
 @projects_bp.patch("/<int:project_id>")
 def update_project(project_id):
-    data = request.get_json(silent=True)
+    data = get_json_body()
     
-    if data is None:
-        return {
-            "error": "Request bosy must contain valid JSON"
-        }, 400
-        
-    try:
-        project = service.update_project(project_id, data)
-        return project.to_dict(), 200
-    
-    except ValidationError as error:
-        return {
-            "error": str(error)
-        }, 400
-    
-    except ResourceNotFoundError as error:
-        return {
-            "error": str(error)
-        }, 404
-    
-    except ConflictError as error:
-        return {
-            "error": str(error)
-        }, 409
+    project = service.update_project(project_id, data)
+    return project.to_dict(), 200
     
 @projects_bp.delete("/<int:project_id>")
 def delete_project(project_id):
-    try:
-        service.delete_project(project_id)
-        return "", 204
-    except ResourceNotFoundError as error:
-        return {"error": str(error)}, 404
+    service.delete_project(project_id)
+    return "", 204
+
+def get_json_body():
+    data = request.get_json(silent=True)
     
+    if data is None:
+        raise ValidationError(
+            "Request body must contain valid JSON"
+        )
+    
+    if not isinstance(data, dict):
+        raise ValidationError(
+            "Request body must be a JSON object"
+        )
+    
+    return data
