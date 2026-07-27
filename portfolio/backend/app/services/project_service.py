@@ -70,11 +70,11 @@ class ProjectService:
                 "Project title"
             )
             
-            existiing_project = self.repository.get_by_title(title)
+            existing_project = self.repository.get_by_title(title)
             
-            if(existiing_project is not None and existiing_project.id != project.id):
+            if(existing_project is not None and existing_project.id != project.id):
                 raise ConflictError(
-                    "A priject with this title already exists"
+                    "A project with this title already exists"
                 )
                 
             updates['title'] = title

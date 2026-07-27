@@ -1,6 +1,6 @@
 # Engineering Journey Academy Progress
 
-Last updated: 2026-07-27T01:01:10+01:00
+Last updated: 2026-07-27T01:53:07+01:00
 
 ## Current Status
 
@@ -10,23 +10,29 @@ Requested repository name: `engineering-journey-platform`
 
 Verified local Git repository: `/home/magic/Documents/my_dev_journey/academy`
 
-- Current active class: Flask testing with pytest.
-- Last completed class: Class 002 - Git workflow.
-- Latest commit: `5bb199dc486bf8594fc6851877af8b50020db760`
-- Latest commit subject: `refactor: centralize API error handling`
+- Current active class: Class #014 - Request Validation and Serialization with Marshmallow.
+- Last completed class: Class #013 - Testing Flask Applications with Pytest.
+- Latest verified learning unit: Flask testing with pytest.
+- Latest commit: `d36134b3d732832e4327472981642b1a42779515`
+- Latest commit subject: `chore: stop tracking virtual environment`
 - Branch: `master`
-- Overall status: Backend tests now exist and the plain pytest suite passes. Coverage is currently reported at 93%, but the coverage command exits with a teardown error, so the testing class should remain in progress until the coverage run is clean.
+- Overall status: Flask backend testing foundation is complete. Tests pass. Coverage passes. Ready for Class #014.
 
 Verification rules:
 
 - Update this file whenever a class is completed.
 - Do not mark a class complete unless its files or commands are verified.
 - Do not mark a major feature complete unless implementation exists, relevant tests exist, tests pass, required migrations are applied, architecture matches the course, and this file is updated.
-- If evidence is present but not tied to a numbered class, list it as verified work, not a completed class.
+- If evidence is present but not tied to a numbered class, list it as verified work, not a completed numbered class.
 
 ## Completed Work
 
-Features implemented in source:
+Completed classes:
+
+- Class #002 - Git workflow.
+- Class #013 - Testing Flask Applications with Pytest.
+
+Features implemented and currently covered by passing tests:
 
 - Flask application factory and blueprint registration in `portfolio/backend/app/__init__.py`.
 - Environment-based Flask configuration, including `TestConfig`, in `portfolio/backend/app/config.py`.
@@ -39,12 +45,15 @@ Features implemented in source:
 - Centralized application errors and error handlers in `portfolio/backend/app/exceptions.py` and `portfolio/backend/app/error_handlers.py`.
 - Alembic environment and migrations in `portfolio/backend/migrations`.
 - Backend pytest foundation in `portfolio/backend/tests/`.
+- Generated virtual environment, cache, and coverage artifacts are not tracked by Git.
+- Project service duplicate-title typo cleanup in `portfolio/backend/app/services/project_service.py`.
 
 Completed assignments:
 
-| Class | Assignment file | Verified status |
+| Class | Assignment / evidence | Verified status |
 | --- | --- | --- |
-| Class 002 | `assignments/class-002.md` | Completed answers present |
+| Class #002 | `assignments/class-002.md` | Completed answers present; Git history supports Git workflow work. |
+| Class #013 | `notes/flask-testing-with-pytest.md`, `portfolio/backend/tests/` | Testing learning objectives implemented and verified by passing tests and coverage. |
 
 Incomplete assignments:
 
@@ -72,14 +81,17 @@ Experiments verified:
 - `experiments/execution/hello.go`
 - `experiments/networking/http_request.py`
 
-Files created or modified in the current working tree:
+Files created or modified in this progress update:
 
-- Deleted from root: `.env.example`, `.gitignore`, `README.md`, `requirements.txt`.
-- Added under backend: `portfolio/backend/.env.example`, `portfolio/backend/.gitignore`, `portfolio/backend/README.md`.
-- Modified backend files: `portfolio/backend/app/__init__.py`, `portfolio/backend/app/config.py`, `portfolio/backend/app/models/project.py`, `portfolio/backend/requirements.txt`.
-- Added tests: `portfolio/backend/tests/__init__.py`, `portfolio/backend/tests/conftest.py`, `portfolio/backend/tests/integration/__init__.py`, `portfolio/backend/tests/integration/test_health_routes.py`, `portfolio/backend/tests/integration/test_project_routes.py`, `portfolio/backend/tests/unit/__init__.py`, `portfolio/backend/tests/unit/test_project_service.py`.
-- Added note: `notes/flask-testing-with-pytest.md`.
-- Progress file updated: `PROGRESS.md`.
+- `PROGRESS.md`
+- `GRADEBOOK.md`
+- `portfolio/backend/app/services/project_service.py` contains the verified typo cleanup.
+
+Working tree status during this progress update:
+
+- `PROGRESS.md` modified.
+- `GRADEBOOK.md` added.
+- `portfolio/backend/app/services/project_service.py` modified.
 
 ## Testing
 
@@ -93,7 +105,7 @@ Test framework:
 - Python framework: `pytest`.
 - Coverage tooling: `pytest-cov` and `coverage`.
 - Flask testing: Flask test client via `portfolio/backend/tests/conftest.py`.
-- Test database: SQLite in-memory database configured by `TestConfig`.
+- Test database: per-test temporary SQLite database file created through `tmp_path`.
 
 Test files:
 
@@ -118,60 +130,66 @@ End-to-end tests:
 Passing:
 
 - `portfolio/backend/.venv/bin/python -m pytest`
-- Result: 30 collected, 30 passed in 8.74s.
+  - Result: 30 collected, 30 passed in 6.21s.
+- `portfolio/backend/.venv/bin/python -m pytest --cov=app --cov-report=term-missing`
+  - Result: 30 collected, 30 passed in 6.77s.
 
 Failing or blocked:
 
-- `portfolio/backend/.venv/bin/python -m pytest --cov=app`
-- Result: 30 tests passed, but command exited with 1 error during teardown.
-- Error: `sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: projects` while `db.drop_all()` ran in `tests/conftest.py`.
+- None in the latest check.
 
 Current test coverage:
 
-- Total reported coverage: 93%.
-- Important caveat: this coverage number came from a coverage run that exited with an error, so it is useful as a current measurement but not yet a clean passing coverage result.
+- Total coverage: 93%.
+- Coverage command status: passing.
 
-Coverage details from latest run:
+Coverage details from latest clean run:
 
-| File | Coverage |
-| --- | --- |
-| `app/__init__.py` | 100% |
-| `app/config.py` | 100% |
-| `app/error_handlers.py` | 79% |
-| `app/exceptions.py` | 100% |
-| `app/extensions.py` | 100% |
-| `app/models/__init__.py` | 100% |
-| `app/models/project.py` | 100% |
-| `app/repositories/__init__.py` | 100% |
-| `app/repositories/project_repository.py` | 76% |
-| `app/routes/__init__.py` | 100% |
-| `app/routes/health.py` | 100% |
-| `app/routes/home.py` | 80% |
-| `app/routes/info.py` | 80% |
-| `app/routes/project.py` | 97% |
-| `app/services/__init__.py` | 100% |
-| `app/services/project_service.py` | 97% |
-| Total | 93% |
+| File | Coverage | Missing lines |
+| --- | ---: | --- |
+| `app/__init__.py` | 100% | None |
+| `app/config.py` | 100% | None |
+| `app/error_handlers.py` | 79% | 26, 35-42 |
+| `app/exceptions.py` | 100% | None |
+| `app/extensions.py` | 100% | None |
+| `app/models/__init__.py` | 100% | None |
+| `app/models/project.py` | 100% | None |
+| `app/repositories/__init__.py` | 100% | None |
+| `app/repositories/project_repository.py` | 76% | 28-30, 41-43, 50-52 |
+| `app/routes/__init__.py` | 100% | None |
+| `app/routes/health.py` | 100% | None |
+| `app/routes/home.py` | 80% | 7 |
+| `app/routes/info.py` | 80% | 8 |
+| `app/routes/project.py` | 97% | 57 |
+| `app/services/__init__.py` | 100% | None |
+| `app/services/project_service.py` | 97% | 76, 123 |
+| Total | 93% | 18 missed statements |
 
 Commands run:
 
 - `git status --short`
+- `git log --oneline --decorate -10`
 - `git log -1 --format=%H%n%h%n%ad%n%s --date=iso-strict`
-- `find . -path './.git' -prune -o -path './portfolio/backend/.venv' -prune -o -type f \( -name 'test_*.py' -o -name '*_test.py' -o -name 'pytest.ini' -o -name 'pyproject.toml' -o -name 'setup.cfg' -o -name 'requirements*.txt' \) -print | sort`
+- `git ls-files | grep -E '\.venv|__pycache__|\.pytest_cache|htmlcov|\.coverage'`
+- `find assignments notes experiments portfolio/backend/tests portfolio/backend/app -path '*/__pycache__' -prune -o -type f -print | sort`
+- `sed -n '1,220p' assignments/class-002.md`
+- `sed -n '1,260p' notes/flask-testing-with-pytest.md`
+- `sed -n '1,260p' portfolio/backend/tests/conftest.py`
+- `sed -n '1,260p' portfolio/backend/tests/unit/test_project_service.py`
+- `sed -n '1,340p' portfolio/backend/tests/integration/test_project_routes.py`
+- `rg -n "existiing|priject|TODO|FIXME" portfolio/backend/app portfolio/backend/tests notes -g '!**/__pycache__/**'`
 - `portfolio/backend/.venv/bin/python -m pytest`
-- `portfolio/backend/.venv/bin/python -m pytest --cov=app`
-- `portfolio/backend/.venv/bin/alembic current`
-- `portfolio/backend/.venv/bin/alembic heads`
+- `portfolio/backend/.venv/bin/python -m pytest --cov=app --cov-report=term-missing`
+- `portfolio/backend/.venv/bin/python -m alembic current`
+- `portfolio/backend/.venv/bin/python -m alembic heads`
 - `date --iso-8601=seconds`
-- `git diff --name-status`
-- `git diff --cached --name-status`
 
 ## Database And Migrations
 
 Database:
 
 - Development database: SQLite at `portfolio/backend/instance/project.sql`.
-- Test database: SQLite in-memory database from `TestConfig`.
+- Test database: per-test temporary SQLite database file.
 - SQLAlchemy URI is built in `portfolio/backend/app/config.py`.
 
 Database migrations created:
@@ -197,55 +215,51 @@ Pending migrations:
 
 ## Unresolved Issues
 
-Issue: Coverage command fails during teardown.
-
-- Cause: `db.drop_all()` in `portfolio/backend/tests/conftest.py` attempted to drop `projects`, but SQLite reported `no such table: projects`.
-- Suggested next action: Make the test database fixture lifecycle deterministic, then rerun `pytest --cov=app` until it exits successfully.
-
-Issue: Coverage is measured but not clean.
-
-- Cause: `pytest --cov=app` reported 93% total coverage but exited with status 1 because of the teardown error.
-- Suggested next action: Treat 93% as the current reported coverage, not as a completed passing coverage gate.
-
-Issue: Project service contains typo debt if still present after current edits.
-
-- Cause: Previous inspection found `existiing_project` and error text `A priject with this title already exists` in `portfolio/backend/app/services/project_service.py`.
-- Suggested next action: Verify the current file and cover duplicate-title update behavior with a service or API test.
-
 Issue: No-op Alembic migration exists.
 
 - Cause: `portfolio/backend/migrations/versions/7b11003d2c3a_.py` has message `empty message` and `pass` in upgrade/downgrade.
 - Suggested next action: Leave it if already applied in shared history, but avoid creating empty migrations in future classes.
 
-Issue: Generated artifacts are tracked or present.
-
-- Cause: Git status shows tracked `__pycache__` changes, and local generated coverage artifacts exist under `portfolio/backend/.coverage` and `portfolio/backend/htmlcov/`.
-- Suggested next action: Remove generated artifacts from Git tracking with a non-destructive index-only cleanup and ensure backend `.gitignore` excludes caches and coverage output.
-
 ## Technical Debt
 
-- Coverage run is not clean yet.
-- Repository tests for transaction rollback/database constraints are not yet visible in the current test files inspected.
-- No CI workflow exists.
-- Some generated artifacts are tracked or present in the working tree.
+- Repository rollback tests.
+- Database constraint tests.
+- Lower coverage in repository layer: `app/repositories/project_repository.py` is 76%.
+- Lower coverage in error handlers: `app/error_handlers.py` is 79%.
+- Lower coverage in home/info routes: `app/routes/home.py` and `app/routes/info.py` are 80%.
+- CI pipeline.
 - The repository name in the academy instructions, `engineering-journey-platform`, does not match the verified local Git directory name, `academy`.
 
 ## Latest Git Commit
 
-- Full SHA: `5bb199dc486bf8594fc6851877af8b50020db760`
-- Short SHA: `5bb199d`
-- Date: `2026-07-24T00:00:57+01:00`
-- Subject: `refactor: centralize API error handling`
+- Full SHA: `d36134b3d732832e4327472981642b1a42779515`
+- Short SHA: `d36134b`
+- Date: `2026-07-27T01:39:52+01:00`
+- Subject: `chore: stop tracking virtual environment`
+
+Recent history:
+
+- `d36134b (HEAD -> master) chore: stop tracking virtual environment`
+- `1728398 test: add Flask service and API tests`
+- `5bb199d refactor: centralize API error handling`
+- `050fd7f feat: add project service layer and CRUD endpoints`
+- `ef3fb28 feat: implement repository pattern for project data access`
+- `e3a013a feat: configure Alembic and create initial database migrations`
+- `80b7c1a feat: integrate SQLAlchemy and create first model`
+- `934ec08 feat: add enviroment-based configuration`
+- `ff905c3 refactor: adopt Flask Application Factory and Blueprints`
+- `1aac55e feat: create first Flask API`
 
 ## Next Recommended Step
 
 Next class:
 
-- Finish Flask backend testing foundation.
+- Class #014 - Request Validation and Serialization with Marshmallow.
 
 Preparation required:
 
-- Fix the coverage-run teardown error in `portfolio/backend/tests/conftest.py`.
-- Rerun `portfolio/backend/.venv/bin/python -m pytest --cov=app`.
-- Add focused tests for repository rollback/database constraints if they are part of the current class.
-- Update this file after the coverage command exits successfully.
+- Add Marshmallow to backend dependencies.
+- Define project request/response schemas.
+- Move request validation out of route/service ad hoc checks where appropriate.
+- Add tests for required fields, invalid types, unknown fields, serialized response shape, and validation error bodies.
+- Keep existing pytest and coverage gates passing.

@@ -17,3 +17,47 @@ What is JSON, and why is it commonly used?
 What does a 404 Not Found response mean? What about 500 Internal Server Error?
     A 404 response means that the requested resource does not exist or could not be found by the server.
     A 500 response means that the server encountered an error while trying to process the request.
+
+---
+
+## Academy Review
+
+Score:
+
+- Technical correctness: 34/40
+- Understanding: 26/30
+- Completeness: 17/20
+- Engineering practices: 8/10
+- Overall: 85/100
+
+What is correct:
+
+- You clearly explain client/server roles.
+- Your HTTP method definitions are mostly correct.
+- Your 404 and 500 explanations are correct.
+- You understand that APIs mediate frontend access to data.
+
+Corrections:
+
+- A frontend should not talk directly to a database not only because of formatting, but because of security, authentication, authorization, validation, business rules, and keeping database credentials private.
+- JSON is a text data format, not just something supported by many languages.
+- `PUT` usually replaces a whole resource, while `PATCH` partially updates a resource. Your answer captures this.
+
+Improved answer:
+
+```text
+A client sends requests. A server receives requests, processes them, and sends responses.
+
+A frontend communicates with an API instead of the database because the API protects database credentials, validates input, applies business rules, checks authentication and authorization, and returns data in a frontend-friendly format.
+
+GET retrieves data. POST creates a new resource. PUT replaces a resource. PATCH updates part of a resource. DELETE removes a resource.
+
+JSON is a text format for representing structured data with objects, arrays, strings, numbers, booleans, and null. It is common because it is lightweight and widely supported.
+
+404 means the requested resource was not found. 500 means the server failed unexpectedly while processing the request.
+```
+
+Additional practice:
+
+- For each project route, identify the HTTP method, expected status code, and response body.
+- Explain why APIs should validate input before touching the database.
