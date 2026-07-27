@@ -5,8 +5,15 @@ from app.config import TestConfig
 from app.extensions import db
 
 @pytest.fixture
-def app():
-    app = create_app(TestConfig)
+def app(tmp_path):
+    
+    database_file = tmp_path / "test.db"
+    
+    class TemporaryTestConfig(TestConfig):
+        SQLALCHEMY_DATABASE_URI = f"sqlite:///{database_file}"
+    
+    
+    app = create_app(TemporaryTestConfig)
     
     with app.app_context():
         db.create_all()

@@ -1,7 +1,27 @@
 .env
-.venv/
-__pycache__/
+
 *.pyc
-htmlcov/
-.coverage
 instance/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Virtual environment
+.venv/
+venv/
+
+# SQLite test databases
+*.db
+*.sqlite
+*.sqlite3
