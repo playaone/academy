@@ -1,5 +1,5 @@
 from app.extensions import db
-from datetime import datetime
+from datetime import datetime, UTC
 
 class Project(db.Model):
     __tablename__ = "projects"
@@ -10,8 +10,8 @@ class Project(db.Model):
     description = db.Column(db.Text, nullable=False)
     github_url = db.Column(db.String(255), nullable=True)
     website_url = db.Column(db.String(255), nullable=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(UTC))
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now(UTC), onupdate=datetime.now(UTC))
     
     def to_dict(self):
         return {

@@ -1,0 +1,274 @@
+payload = {
+    "title": "Engineering Journey Platform",
+    "description": "A full-stack portfolio platform",
+    "github_url": "https://github.com/example/project",
+    "website_url": "https://example.com"
+}
+payload2 = {
+    "title": "Engineering Journey Platform 2",
+    "description": "A full-stack portfolio platform 2",
+    "github_url": "https://github.com/example/project/2",
+    "website_url": "https://example.com/2"
+}
+
+def test_create_project_returns_201(client):
+    
+    response = client.post(
+        "/projects",
+        json=payload
+    )
+    
+    assert response.status_code == 201
+    
+
+def test_create_project_returns_created_project(client):
+    response = client.post(
+        "/projects",
+        json=payload
+    )
+    
+    data = response.get_json()
+    
+    assert data['id'] is not None
+    assert data['title'] == payload['title']
+    assert data['description'] == payload['description']
+    assert data['github_url'] == payload["github_url"]
+    assert data['website_url'] == payload["website_url"]
+    
+    
+def test_create_project_without_title_returns_400(client):
+    payload = {
+        "description": "A project without a title"
+    }
+    
+    response = client.post(
+        "/projects",
+        json=payload
+    )
+    
+    data =response.get_json()
+    
+    assert response.status_code == 400
+    
+    assert data['error']['code'] == "validation_error"
+    assert data['error']['message'] == (
+        "Project title is required"
+    )
+    
+def test_create_project_with_invalid_json_returns_400(client):
+    response = client.post(
+        "/projects",
+        data="{'title':",
+        content_type="application/json"
+    )
+    
+    data = response.get_json()
+    
+    assert response.status_code == 400
+    assert data['error']['code'] == "validation_error"
+    assert data['error']['message'] == (
+        "Request body must contain valid JSON"
+    )
+    
+    
+def test_create_duplicate_project_returns_409(client):
+    first_response = client.post(
+        "/projects",
+        json=payload
+    )
+    
+    second_response = client.post(
+        "/projects",
+        json=payload
+    )
+    
+    data = second_response.get_json()
+    
+    assert first_response.status_code == 201
+    assert second_response.status_code == 409
+    
+    assert data['error']['code'] == "conflict"
+    
+    
+def test_list_projects_returns_created_projects(client):
+    client.post(
+        "/projects",
+        json=payload
+    )
+    
+    client.post(
+        "/projects",
+        json=payload2
+    )
+    
+    response = client.get("/projects")
+    
+    data = response.get_json()
+    
+    titles = {
+        project['title']
+        for project in data["items"]
+    }
+    
+    assert response.status_code == 200
+    assert len(data['items']) == 2
+    
+    assert titles == {
+        payload['title'],
+        payload2['title']
+    }
+    
+
+def test_get_project_returns_project(client):
+    create_response = client.post(
+        "/projects",
+        json=payload
+    )
+    
+    created_data = create_response.get_json()
+    
+    project_id = created_data['id']
+    
+    response = client.get(f"/projects/{project_id}")
+    
+    data = response.get_json()
+    
+    assert response.status_code == 200
+    assert data["id"] == project_id
+    assert data['title'] == payload["title"]
+    
+    
+def test_get_missing_project_returns_404(client):
+    response = client.get("/projects/9999")
+    
+    data = response.get_json()
+    
+    assert response.status_code == 404
+    
+    assert data['error']['code'] == "resource_not_found"
+    assert data['error']['message'] == "Project not found"
+    
+
+def test_update_project_returns_updated_data(client):
+    create_response = client.post(
+        "/projects",
+        json=payload
+    )
+    
+    created_data = create_response.get_json()
+    
+    project_id = created_data['id']
+    
+    update_response = client.patch(
+        f"/projects/{project_id}",
+        json={**payload, "title": payload2['title']}
+    )
+    
+    response = client.get(f"/projects/{project_id}")
+    
+    data = response.get_json()
+    
+    assert create_response.status_code == 201
+    assert update_response.status_code == 200
+    assert response.status_code == 200
+    
+    assert data['title'] != payload["title"]
+    assert data['title'] == payload2["title"]
+    
+    assert data['description'] == payload["description"]
+    
+
+def test_update_project_rejects_unknown_fields(client):
+    create_response = client.post(
+            "/projects",
+            json=payload
+        )
+        
+    created_data = create_response.get_json()
+    
+    project_id = created_data['id']
+    
+    update_response = client.patch(
+        f"/projects/{project_id}",
+        json={**payload, "title": payload2['title'], "owner_password": "secret"}
+    )
+    
+    data = update_response.get_json()
+    
+    assert update_response.status_code == 400
+    
+    assert data['error']['code'] == "unsupported_field"
+    assert data['error']['message'] == "Unsupported project fields: owner_password"
+    
+
+def test_delete_project_returns_204(client):
+    create_response = client.post(
+            "/projects",
+            json=payload
+        )
+        
+    created_data = create_response.get_json()
+    
+    project_id = created_data['id']
+    
+    delete_response = client.delete(f"/projects/{project_id}")
+    
+    assert delete_response.status_code == 204
+    
+    get_response = client.get(f"/projects/{project_id}")
+    
+    assert get_response.status_code == 404
+    
+    
+def test_create_project_without_description_returns_400(client):
+    response = client.post(
+        "/projects",
+        json={
+            "title": "project title",
+            "github_url": "https://github_url.com",
+            "website_url": "https://website_url.com"
+        }
+    )
+    
+    data = response.get_json()
+    
+    assert response.status_code == 400
+    assert data['error']['code'] == "validation_error"
+    assert data['error']['message'] == "Project description is required"
+
+
+def test_update_project_with_no_fields_returns_400(client):
+    create_response = client.post(
+        "/projects",
+        json=payload
+    )
+    
+    created_response_data = create_response.get_json()
+    project_id = created_response_data['id']
+    
+    update_response = client.patch(
+        f"/projects/{project_id}",
+        json={}
+    )
+    
+    update_response_data = update_response.get_json()
+    
+    assert create_response.status_code == 201
+    assert update_response.status_code == 400
+    
+    assert update_response_data['error']['code'] == "validation_error"
+    assert update_response_data['error']['message'] == "Provide at least one field to update"
+
+
+def test_delete_missing_project_returns_404(client):
+    response = client.delete(
+        "/projects/9999"
+    )
+    
+    data = response.get_json()
+    
+    assert response.status_code == 404
+    assert data['error']['code'] == "resource_not_found"
+    assert data['error']['message'] == "Project not found"
+    
+    

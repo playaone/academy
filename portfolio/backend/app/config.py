@@ -27,3 +27,12 @@ class Config:
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{DATABASE_PATH.as_posix()}"
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+class TestConfig(Config):
+    TESTING = True
+    
+    SECRET_KEY = "testing-secret"
+    
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory"
+    
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

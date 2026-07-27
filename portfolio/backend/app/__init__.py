@@ -14,9 +14,9 @@ from app.routes.info import info_bp
 from app.routes.project import projects_bp
 
 
-def create_app():
+def create_app(config_class=Config):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config_class)
     
     db.init_app(app)
     
