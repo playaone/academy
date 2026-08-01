@@ -10,6 +10,7 @@ class Project(db.Model):
     description = db.Column(db.Text, nullable=False)
     github_url = db.Column(db.String(255), nullable=True)
     website_url = db.Column(db.String(255), nullable=True)
+    technologies = db.Column(db.String(500), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(UTC))
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now(UTC), onupdate=datetime.now(UTC))
     
@@ -20,6 +21,7 @@ class Project(db.Model):
             "description": self.description,
             "github_url": self.github_url,
             "website_url": self.website_url,
+            "technologies": self.technologies,
             "created_at": (
                 self.created_at.isoformat()
                 if self.created_at 

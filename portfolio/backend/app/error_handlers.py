@@ -1,7 +1,8 @@
 import logging
 
-from flask import Flask
+from flask import Flask, request
 from werkzeug.exceptions import HTTPException
+from marshmallow.exceptions import ValidationError as MarshmallowValidationError
 
 from app.exceptions import ApplicationError
 from app.extensions import db
@@ -45,3 +46,14 @@ def register_error_handlers(app: Flask):
                 "message": "An unexpected error occured",
             }
         }, 500
+        
+    @app.errorhandler(MarshmallowValidationError)
+    def handle_schema_validation_error(error):
+        return {
+            "error": {
+                "code": "validation_error",
+                "message": "Request validation failed",
+                "details": error.messages,
+                "path": request.path
+            }
+        }, 400
