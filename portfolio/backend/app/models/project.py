@@ -11,8 +11,8 @@ class Project(db.Model):
     github_url = db.Column(db.String(255), nullable=True)
     website_url = db.Column(db.String(255), nullable=True)
     technologies = db.Column(db.String(500), nullable=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(UTC))
-    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now(UTC), onupdate=datetime.now(UTC))
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     def to_dict(self):
         return {

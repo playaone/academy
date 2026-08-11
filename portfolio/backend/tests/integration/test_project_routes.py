@@ -37,13 +37,13 @@ def test_create_project_returns_created_project(client):
     
     
 def test_create_project_without_title_returns_400(client):
-    payload = {
+    test_payload = {
         "description": "A project without a title"
     }
     
     response = client.post(
         "/projects",
-        json=payload
+        json=test_payload
     )
     
     data =response.get_json()
@@ -52,7 +52,7 @@ def test_create_project_without_title_returns_400(client):
     
     assert data['error']['code'] == "validation_error"
     assert data['error']['message'] == (
-        "Project title is required"
+        "Request validation failed"
     )
     
 def test_create_project_with_invalid_json_returns_400(client):
@@ -197,8 +197,8 @@ def test_update_project_rejects_unknown_fields(client):
     
     assert update_response.status_code == 400
     
-    assert data['error']['code'] == "unsupported_field"
-    assert data['error']['message'] == "Unsupported project fields: owner_password"
+    assert data['error']['code'] == "validation_error"
+    assert data['error']['message'] == "Request validation failed"
     
 
 def test_delete_project_returns_204(client):
@@ -234,7 +234,7 @@ def test_create_project_without_description_returns_400(client):
     
     assert response.status_code == 400
     assert data['error']['code'] == "validation_error"
-    assert data['error']['message'] == "Project description is required"
+    assert data['error']['message'] == "Request validation failed"
 
 
 def test_update_project_with_no_fields_returns_400(client):
@@ -257,7 +257,7 @@ def test_update_project_with_no_fields_returns_400(client):
     assert update_response.status_code == 400
     
     assert update_response_data['error']['code'] == "validation_error"
-    assert update_response_data['error']['message'] == "Provide at least one field to update"
+    assert update_response_data['error']['message'] == "Request validation failed"
 
 
 def test_delete_missing_project_returns_404(client):
