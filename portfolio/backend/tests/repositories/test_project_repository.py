@@ -1,3 +1,6 @@
+from unittest.mock import patch
+from sqlalchemy.exc import SQLAlchemyError
+
 import pytest
 from app.repositories.project_repository import ProjectRepository
 
@@ -196,4 +199,22 @@ def test_delete_single_record_does_not_affect_others(repository):
 def test_get_all_returns_empty_list_for_fresh_db(repository):
     assert len(repository.get_all()) < 1
     
+@patch("app.repositories.project_repository.Project")
+def test_raises_internal_server_error_for_unknown_operations(mock_get_project, repository):
+    mock_get_project.side_effect = Exception("Unhandled application error")
     
+    with pytest.raises(Exception):
+        repository.create(
+            title="another project",
+            description="Another banger"
+        )
+        
+@patch("app.repositories.project_repository.db.session.commit")
+def test_raises_SQLAlchemyError(mock_db, repository):
+    mock_db.side_effect = SQLAlchemyError()
+    
+    with pytest.raises(SQLAlchemyError):
+        repository.create(
+            title="another project",
+            description="Another banger"
+        )

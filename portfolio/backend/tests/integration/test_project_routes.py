@@ -1,3 +1,7 @@
+import pytest
+from unittest.mock import patch
+from werkzeug.exceptions import HTTPException
+
 payload = {
     "title": "Engineering Journey Platform",
     "description": "A full-stack portfolio platform",
@@ -272,3 +276,28 @@ def test_delete_missing_project_returns_404(client):
     assert data['error']['message'] == "Project not found"
     
     
+def test_missing_route_returns_HTTPException(client):
+    response = client.get("/project/99")
+    assert response.status_code == 404
+    data = response.get_json()
+    
+    assert data == {
+        "error": {
+            "code": "not_found",
+            "message": "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."
+        }
+    }
+            
+
+@patch("app.routes.project.service.get_project")
+def test_catches_internal_server_error_for_unknown_operations(mock_get_project, client):
+    mock_get_project.side_effect = Exception("Unhandled application error")
+    
+    response = client.get("/projects/1")
+    
+    data = response.get_json()
+    
+    assert response.status_code == 500
+    
+    assert data['error']['code'] == "internal_server_error"
+    assert data['error']['message'] == "An unexpected error occured"
