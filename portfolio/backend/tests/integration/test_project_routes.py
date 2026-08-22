@@ -2,34 +2,33 @@ import pytest
 from unittest.mock import patch
 from werkzeug.exceptions import HTTPException
 
-payload = {
-    "title": "Engineering Journey Platform",
-    "description": "A full-stack portfolio platform",
-    "github_url": "https://github.com/example/project",
-    "website_url": "https://example.com"
-}
-payload2 = {
-    "title": "Engineering Journey Platform 2",
-    "description": "A full-stack portfolio platform 2",
-    "github_url": "https://github.com/example/project/2",
-    "website_url": "https://example.com/2"
-}
+from tests.factories.project_factory import build_project_data, create_project_via_api
+
+# payload = {
+#     "title": "Engineering Journey Platform",
+#     "description": "A full-stack portfolio platform",
+#     "github_url": "https://github.com/example/project",
+#     "website_url": "https://example.com"
+# }
+# payload2 = {
+#     "title": "Engineering Journey Platform 2",
+#     "description": "A full-stack portfolio platform 2",
+#     "github_url": "https://github.com/example/project/2",
+#     "website_url": "https://example.com/2"
+# }
+
+payload = build_project_data(github_url="https://github.com/example/project", website_url="https://example.com")
+payload2 = build_project_data(sequence=2, github_url="https://github.com/example/project/2", website_url="https://example.com/2")
 
 def test_create_project_returns_201(client):
     
-    response = client.post(
-        "/projects",
-        json=payload
-    )
+    response = create_project_via_api(client)
     
     assert response.status_code == 201
     
 
 def test_create_project_returns_created_project(client):
-    response = client.post(
-        "/projects",
-        json=payload
-    )
+    response = create_project_via_api(client, github_url=payload['github_url'], website_url=payload['website_url'])
     
     data = response.get_json()
     
@@ -76,15 +75,9 @@ def test_create_project_with_invalid_json_returns_400(client):
     
     
 def test_create_duplicate_project_returns_409(client):
-    first_response = client.post(
-        "/projects",
-        json=payload
-    )
+    first_response = create_project_via_api(client)
     
-    second_response = client.post(
-        "/projects",
-        json=payload
-    )
+    second_response = create_project_via_api(client)
     
     data = second_response.get_json()
     
@@ -95,10 +88,7 @@ def test_create_duplicate_project_returns_409(client):
     
     
 def test_list_projects_returns_created_projects(client):
-    client.post(
-        "/projects",
-        json=payload
-    )
+    create_project_via_api(client)
     
     client.post(
         "/projects",
@@ -124,10 +114,7 @@ def test_list_projects_returns_created_projects(client):
     
 
 def test_get_project_returns_project(client):
-    create_response = client.post(
-        "/projects",
-        json=payload
-    )
+    create_response = create_project_via_api(client)
     
     created_data = create_response.get_json()
     
@@ -154,10 +141,7 @@ def test_get_missing_project_returns_404(client):
     
 
 def test_update_project_returns_updated_data(client):
-    create_response = client.post(
-        "/projects",
-        json=payload
-    )
+    create_response = create_project_via_api(client)
     
     created_data = create_response.get_json()
     
@@ -183,10 +167,7 @@ def test_update_project_returns_updated_data(client):
     
 
 def test_update_project_rejects_unknown_fields(client):
-    create_response = client.post(
-            "/projects",
-            json=payload
-        )
+    create_response = create_project_via_api(client)
         
     created_data = create_response.get_json()
     
@@ -242,10 +223,7 @@ def test_create_project_without_description_returns_400(client):
 
 
 def test_update_project_with_no_fields_returns_400(client):
-    create_response = client.post(
-        "/projects",
-        json=payload
-    )
+    create_response = create_project_via_api(client)
     
     created_response_data = create_response.get_json()
     project_id = created_response_data['id']

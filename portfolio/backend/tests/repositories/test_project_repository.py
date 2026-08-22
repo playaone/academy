@@ -3,6 +3,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 import pytest
 from app.repositories.project_repository import ProjectRepository
+from tests.factories.project_factory import create_project
 
 @pytest.fixture
 def repository(app):
@@ -10,12 +11,10 @@ def repository(app):
 
 
 def test_create_repository(repository):
-    project = repository.create(
+    project = create_project(
+        repository,
         title="Engineering Journey",
-        description="Backend enginerring project",
-        github_url="https://github.com/example/project",
-        website_url=None,
-        technologies="Flask SQLAlchemy"
+        description="Backend enginerring project"
     )
     
     assert project.id is not None
@@ -24,9 +23,9 @@ def test_create_repository(repository):
     
 
 def test_get_by_id(repository):
-    created = repository.create(
-        title="Project one",
-        description="Example"
+    created = create_project(
+        repository,
+        title="Project one"
     )
     
     loaded = repository.get_by_id(created.id)
@@ -43,7 +42,8 @@ def test_get_by_id_returns_none(repository):
     
     
 def test_update_project(repository):
-    project = repository.create(
+    project = create_project(
+        repository,
         title="old",
         description="Old description"
     )
@@ -60,10 +60,7 @@ def test_update_project(repository):
     
 
 def test_delete_project(repository):
-    project = repository.create(
-        title="Deleted project",
-        description="Temporary"
-    )
+    project = create_project(repository)
     
     repository.delete(project)
     
@@ -71,7 +68,8 @@ def test_delete_project(repository):
     
 
 def test_get_by_title(repository):
-    repository.create(
+    create_project(
+        repository,
         title="Portfolio",
         description="Example"
     )
@@ -87,7 +85,8 @@ def test_get_by_title_returns_none(repository):
     
     
 def test_create_sets_timestamps(repository):
-    project = repository.create(
+    project = create_project(
+        repository,
         title="Time test",
         description="Testing timestamps"
     )
@@ -98,8 +97,8 @@ def test_create_sets_timestamps(repository):
     
 def test_update_changed_updated_at(repository):
     import time
-    project = repository.create(
-        title="Project",
+    project = create_project(
+        repository,
         description="Initial"
     )
     
@@ -120,21 +119,20 @@ def test_rollback(repository):
         repository.create(...)
         
         
-    project = repository.create(
-        title="Another Project",
-        description="Still works"
-    )
+    project = create_project(repository)
     
     assert project.id is not None
     
     
 def test_get_all(repository):
-    repository.create(
+    create_project(
+        repository,
         title="First project",
         description="First project description"
     )
     
-    repository.create(
+    create_project(
+        repository,
         title="Second Project",
         description="Second project description"
     )
@@ -146,8 +144,8 @@ def test_get_all(repository):
     
 
 def test_update_single_field_updates_only_that_field(repository):
-    created_project = repository.create(
-        title="Created project",
+    created_project = create_project(
+        repository,
         description="Unchanged Description"
     )
     
@@ -171,17 +169,20 @@ def test_update_single_field_updates_only_that_field(repository):
     
     
 def test_delete_single_record_does_not_affect_others(repository):
-    repository.create(
+    create_project(
+        repository,
         title="create something",
         description="Lorem ipsum"
     )
     
-    repository.create(
+    create_project(
+        repository,
         title="another project",
         description="Another banger"
     )
     
-    to_delete = repository.create(
+    to_delete = create_project(
+        repository,
         title="I will be deleted",
         description="I have been deleted"
     )
@@ -204,17 +205,11 @@ def test_raises_internal_server_error_for_unknown_operations(mock_get_project, r
     mock_get_project.side_effect = Exception("Unhandled application error")
     
     with pytest.raises(Exception):
-        repository.create(
-            title="another project",
-            description="Another banger"
-        )
+        create_project(repository)
         
 @patch("app.repositories.project_repository.db.session.commit")
 def test_raises_SQLAlchemyError(mock_db, repository):
     mock_db.side_effect = SQLAlchemyError()
     
     with pytest.raises(SQLAlchemyError):
-        repository.create(
-            title="another project",
-            description="Another banger"
-        )
+        create_project(repository)

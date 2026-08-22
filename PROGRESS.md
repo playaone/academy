@@ -1,6 +1,6 @@
 # Engineering Journey Academy Progress
 
-Last updated: 2026-08-12T01:58:27+01:00
+Last updated: 2026-08-14T00:51:05+01:00
 
 ## Current Status
 
@@ -12,11 +12,11 @@ Verified local Git repository: `/home/magic/Documents/my_dev_journey/academy`
 
 - Current active class: Class #014 - Testing the Layered Flask Architecture.
 - Last completed class: Class #013 - Request Validation and Response Schemas with Marshmallow.
-- Latest verified learning unit: repository integration testing work inside Class #014.
-- Latest commit: `c1e6b6e`
-- Latest commit subject: `test: added tests for project_repository`
+- Latest verified learning unit: strengthened project service unit tests inside Class #014.
+- Latest commit: `7d60846f7081a26c2886b234f8ef79343db674dc`
+- Latest commit subject: `test: strengthen project service unit tests`
 - Branch: `master`
-- Overall status: Class #013 Marshmallow work is complete and verified. Class #014 is active; repository tests were added and the test suite passes, but schema and error-handler test gaps remain.
+- Overall status: Class #013 Marshmallow work remains complete and verified. Class #014 is active; service, repository, and API tests pass, coverage is up to 96%, and direct schema/error-handler test gaps remain.
 
 Verification rules:
 
@@ -58,7 +58,7 @@ Implemented backend capabilities verified in the repository:
 - `technologies` field on projects.
 - Alembic migration `d9a2cc141e6a_add_technologies_to_projects.py`.
 - Backend pytest foundation with API, service, and repository tests.
-- Generated virtual environment, cache, and coverage artifacts are not tracked by Git.
+- Strengthened service unit tests in `portfolio/backend/tests/services/test_project_service.py`.
 
 Completed assignments / notes reviewed:
 
@@ -66,8 +66,8 @@ Completed assignments / notes reviewed:
 | --- | --- | --- |
 | Class #002 | `assignments/class-002.md`, `notes/git-workflow.md` | Completed answers present; reviewed in gradebook. |
 | Flask testing subtopic | `notes/flask-testing-with-pytest.md`, `portfolio/backend/tests/` | Tests implemented and coverage verified. |
-| Class #013 | `notes/request-response-schemas.md`, `app/schemas/project_schema.py`, route/schema tests through API coverage | Marshmallow learning objectives implemented and verified. |
-| Class #014 active work | `notes/repository-integration-testing.md`, `tests/repositories/test_project_repository.py` | Repository tests added, but class remains active because layered test gaps remain. |
+| Class #013 | `notes/request-response-schemas.md`, `app/schemas/project_schema.py`, route/schema behavior through API coverage | Marshmallow learning objectives implemented and verified. |
+| Class #014 active work | `notes/repository-integration-testing.md`, `tests/repositories/test_project_repository.py`, `tests/services/test_project_service.py` | Repository and service tests added/strengthened, but class remains active because schema and error-handler test gaps remain. |
 
 Notes verified:
 
@@ -95,7 +95,6 @@ Experiments verified:
 Files created or modified by this progress check:
 
 - `PROGRESS.md`
-- `GRADEBOOK.md`
 
 Working tree status before this progress update:
 
@@ -121,14 +120,15 @@ Test files:
 - `portfolio/backend/tests/integration/test_health_routes.py`
 - `portfolio/backend/tests/integration/test_project_routes.py`
 - `portfolio/backend/tests/repositories/test_project_repository.py`
+- `portfolio/backend/tests/services/test_project_service.py`
 - `portfolio/backend/tests/unit/test_project_service.py`
 
 Passing:
 
 - `portfolio/backend/.venv/bin/python -m pytest`
-  - Result: 35 collected, 35 passed in 8.96s.
+  - Result: 57 collected, 57 passed in 11.91s.
 - `portfolio/backend/.venv/bin/python -m pytest --cov=app --cov-report=term-missing`
-  - Result: 35 collected, 35 passed in 10.89s.
+  - Result: 57 collected, 57 passed in 14.66s.
 
 Warnings:
 
@@ -136,50 +136,54 @@ Warnings:
 
 Failing or blocked:
 
-- None in the latest check.
+- No project verification commands are failing in the latest check.
+- An initial Alembic command was run with the wrong root-relative path from inside `portfolio/backend` and failed with `No such file or directory`; the command was rerun correctly and passed.
 
 Current test coverage:
 
-- Total coverage: 93%.
+- Total coverage: 96%.
 - Coverage command status: passing.
 
 Coverage details from latest clean run:
 
 | File | Coverage | Missing lines |
 | --- | ---: | --- |
-| `app/__init__.py` | 100% | None |
-| `app/config.py` | 100% | None |
-| `app/error_handlers.py` | 83% | 27, 36-43 |
-| `app/exceptions.py` | 100% | None |
-| `app/extensions.py` | 100% | None |
-| `app/models/__init__.py` | 100% | None |
-| `app/models/project.py` | 93% | 18 |
-| `app/repositories/__init__.py` | 100% | None |
-| `app/repositories/project_repository.py` | 76% | 28-30, 41-43, 50-52 |
-| `app/routes/__init__.py` | 100% | None |
-| `app/routes/health.py` | 100% | None |
-| `app/routes/home.py` | 80% | 7 |
-| `app/routes/info.py` | 80% | 8 |
-| `app/routes/project.py` | 97% | 65 |
-| `app/schemas/__init__.py` | 100% | None |
-| `app/schemas/project_schema.py` | 95% | 51, 96, 104 |
-| `app/services/__init__.py` | 100% | None |
-| `app/services/project_service.py` | 96% | 44 |
-| Total | 93% | 21 missed statements |
+| `portfolio/backend/app/__init__.py` | 100% | None |
+| `portfolio/backend/app/config.py` | 100% | None |
+| `portfolio/backend/app/error_handlers.py` | 100% | None |
+| `portfolio/backend/app/exceptions.py` | 100% | None |
+| `portfolio/backend/app/extensions.py` | 100% | None |
+| `portfolio/backend/app/models/__init__.py` | 100% | None |
+| `portfolio/backend/app/models/project.py` | 100% | None |
+| `portfolio/backend/app/repositories/__init__.py` | 100% | None |
+| `portfolio/backend/app/repositories/project_repository.py` | 84% | 41-43, 50-52 |
+| `portfolio/backend/app/routes/__init__.py` | 100% | None |
+| `portfolio/backend/app/routes/health.py` | 100% | None |
+| `portfolio/backend/app/routes/home.py` | 80% | 7 |
+| `portfolio/backend/app/routes/info.py` | 80% | 8 |
+| `portfolio/backend/app/routes/project.py` | 97% | 65 |
+| `portfolio/backend/app/schemas/__init__.py` | 100% | None |
+| `portfolio/backend/app/schemas/project_schema.py` | 95% | 51, 96, 104 |
+| `portfolio/backend/app/services/__init__.py` | 100% | None |
+| `portfolio/backend/app/services/project_service.py` | 100% | None |
+| Total | 96% | 12 missed statements |
 
 Commands run:
 
 - `git status --short`
 - `git log --oneline --decorate -10`
+- `git log -1 --format=%H%n%h%n%ad%n%s --date=iso-strict`
 - `git ls-files | grep -E '\.venv|__pycache__|\.pytest_cache|htmlcov|\.coverage'`
+- `git ls-files .coverage portfolio/backend/.coverage portfolio/backend/.pytest_cache portfolio/backend/htmlcov | sort`
 - `find . -path './.git' -prune -o -path './portfolio/backend/.venv' -prune -o -type f -print | sort`
+- `find portfolio/backend/tests -type f -not -path '*/__pycache__/*' -print | sort`
+- `rg -n "Project.*Schema|Marshmallow|error_handler|handle_.*error|schema" portfolio/backend/tests -g '!**/__pycache__/**'`
 - `sed -n '1,260p' COURSE_TRACKER.md`
 - `sed -n '1,260p' PROJECT_STATE.md`
-- `sed -n '1,260p' notes/request-response-schemas.md`
-- `sed -n '1,260p' notes/repository-integration-testing.md`
-- `sed -n '1,260p' portfolio/backend/app/schemas/project_schema.py`
-- `sed -n '1,260p' portfolio/backend/app/routes/project.py`
-- `sed -n '1,320p' portfolio/backend/tests/repositories/test_project_repository.py`
+- `sed -n '1,320p' PROGRESS.md`
+- `sed -n '1,360p' portfolio/backend/tests/services/test_project_service.py`
+- `sed -n '1,260p' portfolio/backend/app/models/project.py`
+- `sed -n '1,220p' portfolio/backend/app/schemas/project_schema.py`
 - `portfolio/backend/.venv/bin/python -m pytest`
 - `portfolio/backend/.venv/bin/python -m pytest --cov=app --cov-report=term-missing`
 - `portfolio/backend/.venv/bin/python -m alembic current`
@@ -218,6 +222,11 @@ Pending migrations:
 
 ## Unresolved Issues
 
+Issue: `.coverage` is tracked by Git.
+
+- Cause: `git ls-files | grep -E '\.venv|__pycache__|\.pytest_cache|htmlcov|\.coverage'` returned `.coverage`.
+- Suggested next action: Remove it from Git tracking with an index-only cleanup and keep coverage artifacts ignored.
+
 Issue: No-op Alembic migration exists.
 
 - Cause: `portfolio/backend/migrations/versions/7b11003d2c3a_.py` has message `empty message` and `pass` in upgrade/downgrade.
@@ -230,24 +239,28 @@ Issue: Deprecation warnings in test run.
 
 ## Technical Debt
 
-- Repository rollback test exists but is weak; it forces an exception with `repository.create(...)` rather than a realistic SQLAlchemy failure.
+- Repository rollback test exists but should be reviewed for realistic SQLAlchemy/database failure behavior.
 - Database constraint tests are still incomplete.
-- Lower coverage in repository layer: `app/repositories/project_repository.py` is 76%.
-- Lower coverage in error handlers: `app/error_handlers.py` is 83%.
-- Lower coverage in home/info routes: `app/routes/home.py` and `app/routes/info.py` are 80%.
+- Lower coverage in repository layer: `project_repository.py` is 84%.
+- Lower coverage in home/info routes: `home.py` and `info.py` are 80%.
 - Direct schema unit tests are not yet present; current schema behavior is mostly covered through API tests.
+- Direct error-handler test search returned no matches in `portfolio/backend/tests`.
 - CI pipeline.
 - Debug `print()` remains in `ProjectUpdateSchema.validate_and_normalize`.
 - The repository name in the academy instructions, `engineering-journey-platform`, does not match the verified local Git directory name, `academy`.
 
 ## Latest Git Commit
 
-- Short SHA: `c1e6b6e`
-- Subject: `test: added tests for project_repository`
+- Full SHA: `7d60846f7081a26c2886b234f8ef79343db674dc`
+- Short SHA: `7d60846`
+- Date: `2026-08-13T20:31:33+01:00`
+- Subject: `test: strengthen project service unit tests`
 
 Recent history:
 
-- `c1e6b6e (HEAD -> master) test: added tests for project_repository`
+- `7d60846 (HEAD -> master) test: strengthen project service unit tests`
+- `9974dd1 docs: Graded for class #014`
+- `c1e6b6e test: added tests for project_repository`
 - `615af46 feat: add project request and response schemas`
 - `db317b4 chore: upgraded codex to a teaching assistant.`
 - `d36134b chore: stop tracking virtual environment`
@@ -255,8 +268,6 @@ Recent history:
 - `5bb199d refactor: centralize API error handling`
 - `050fd7f feat: add project service layer and CRUD endpoints`
 - `ef3fb28 feat: implement repository pattern for project data access`
-- `e3a013a feat: configure Alembic and create initial database migrations`
-- `80b7c1a feat: integrate SQLAlchemy and create first model`
 
 ## Next Recommended Step
 
@@ -268,7 +279,8 @@ Preparation required:
 
 - Add direct schema tests for `ProjectCreateSchema`, `ProjectUpdateSchema`, and `ProjectResponseSchema`.
 - Add error-handler tests for Marshmallow validation errors, HTTP exceptions, app errors, and unexpected errors.
-- Strengthen repository rollback and database constraint tests.
+- Strengthen database constraint tests.
 - Remove debug `print()` from schema validation.
 - Replace deprecated `datetime.utcnow` defaults with timezone-aware UTC values.
+- Remove tracked `.coverage` from Git.
 - Keep `pytest --cov=app --cov-report=term-missing` passing.
