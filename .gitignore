@@ -1,0 +1,23 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest and coverage artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Local environments and databases
+.venv/
+venv/
+*.db
+*.sqlite
+*.sqlite3
+
+# Local coding-agent automation
+AGENTS.md
+Makefile
+scripts/

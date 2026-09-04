@@ -40,6 +40,10 @@ JSON response
 - [x] Marshmallow create, update, and response schemas
 - [x] Project CRUD API
 - [x] Existing pytest infrastructure from an earlier sub-topic
+- [x] Layered backend tests for routes, services, repositories, schemas, and error handlers
+- [x] Test project factory helpers
+- [x] Backend GitHub Actions workflow for pytest and coverage
+- [x] Local class closeout command: `make class-check`
 
 ## Current database rule
 
@@ -68,13 +72,14 @@ Tests must not use the development database.
 - [ ] Mobile clients
 - [ ] AI features
 
-## Verification required before Class #014
+## Current verification state
 
-Because the historical testing chat is unavailable, inspect the repository and record:
-
-- Existing test files
-- Existing fixtures
-- Test database strategy
-- Current passing test count
-- Coverage tooling and latest report
-- Untested layers and branches
+- Current class reported by learner: Class #019.
+- Latest local test run: 72 passed.
+- Latest line coverage run: 96%.
+- Latest branch-aware CI-equivalent coverage run: 95.02%, above the 80% CI floor.
+- Latest `make class-check` run: passed.
+- Alembic current/head: `d9a2cc141e6a (head)`.
+- Root-level `.coverage` is still tracked and should be removed from Git tracking.
+- `ProjectUpdateSchema.validate_and_normalize()` still contains debug output.
+- `datetime.utcnow()` deprecation warnings remain in the Project model.

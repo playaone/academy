@@ -38,3 +38,13 @@ The dated history of curriculum revisions.
 - Testing is continuous across every language and framework.
 - Every class must update the tracker, project state, changelog, and memory index.
 - The repository documents override assistant memory when they disagree.
+
+## Class closeout shortcut
+
+After a class, say `class closeout` or run:
+
+```bash
+make class-check
+```
+
+This runs the standard verification workflow for Git status, generated artifacts, backend tests, coverage, CI-equivalent coverage, and Alembic current/head.

@@ -1,6 +1,6 @@
 # Engineering Journey Academy Progress
 
-Last updated: 2026-08-14T00:51:05+01:00
+Last updated: 2026-09-04
 
 ## Current Status
 
@@ -10,24 +10,26 @@ Requested repository name: `engineering-journey-platform`
 
 Verified local Git repository: `/home/magic/Documents/my_dev_journey/academy`
 
-- Current active class: Class #014 - Testing the Layered Flask Architecture.
-- Last completed class: Class #013 - Request Validation and Response Schemas with Marshmallow.
-- Latest verified learning unit: strengthened project service unit tests inside Class #014.
-- Latest commit: `7d60846f7081a26c2886b234f8ef79343db674dc`
-- Latest commit subject: `test: strengthen project service unit tests`
+- Current class reported by learner: Class #019 - CI Foundations with GitHub Actions.
+- Last fully verified completed class in academy records: Class #013 - Request Validation and Response Schemas with Marshmallow.
+- Backfill verification needed: Classes #014-#018.
+- Latest verified learning unit: Class #019 CI foundations assignment and backend GitHub Actions workflow.
+- Latest commit: `baa0b754ef0d646b3014d29d8e3927d707ef23a6`
+- Latest commit subject: `docs: completed my assignment for ci foundation class #019`
 - Branch: `master`
-- Overall status: Class #013 Marshmallow work remains complete and verified. Class #014 is active; service, repository, and API tests pass, coverage is up to 96%, and direct schema/error-handler test gaps remain.
+- Overall status: Backend tests and coverage are healthy. Class #019 is active and reviewed, but not marked complete because the syllabus numbering mismatch must be resolved and Classes #014-#018 need class-by-class completion verification.
+- Class closeout automation: `make class-check` exists and passed locally.
 
 Verification rules:
 
-- Update this file whenever a class is completed.
-- Do not mark a class complete unless its files or commands are verified.
-- Do not mark a major feature complete unless implementation exists, relevant tests exist, tests pass, required migrations are applied, architecture matches the course, and this file is updated.
+- Update this file whenever a class is completed or the verified active class changes.
+- Do not mark a class complete unless implementation, notes or assignment evidence, tests, coverage, and relevant migration state are verified.
+- If migrations are involved, Alembic current must match head.
 - Use repository evidence, tests, coverage, migration state, and Git history instead of stale memory.
 
 ## Completed Work
 
-Completed classes per `COURSE_TRACKER.md` and `MASTER_SYLLABUS.md`:
+Officially verified completed classes:
 
 - Class #001 - Thinking Like a Software Engineer.
 - Class #002 - Setting Up Your Engineering Workspace Like a Professional.
@@ -43,6 +45,14 @@ Completed classes per `COURSE_TRACKER.md` and `MASTER_SYLLABUS.md`:
 - Class #012 - Global Error Handling and Safe Rollbacks.
 - Class #013 - Request Validation and Response Schemas with Marshmallow.
 
+Repository evidence after Class #013 that still needs class-by-class backfill verification:
+
+- Layered test architecture and factories.
+- Service, repository, route, schema-related, and error-handler tests.
+- Coverage strategy notes.
+- Backend CI workflow.
+- Class #019 CI foundations notes.
+
 Implemented backend capabilities verified in the repository:
 
 - Flask application factory and blueprint registration in `portfolio/backend/app/__init__.py`.
@@ -57,8 +67,11 @@ Implemented backend capabilities verified in the repository:
 - Marshmallow create, update, and response schemas in `portfolio/backend/app/schemas/project_schema.py`.
 - `technologies` field on projects.
 - Alembic migration `d9a2cc141e6a_add_technologies_to_projects.py`.
-- Backend pytest foundation with API, service, and repository tests.
-- Strengthened service unit tests in `portfolio/backend/tests/services/test_project_service.py`.
+- Backend pytest foundation with API, service, repository, and error-handler tests.
+- Test factory helper in `portfolio/backend/tests/factories/project_factory.py`.
+- Backend GitHub Actions workflow in `.github/workflows/backend-ci.yml`.
+- Class closeout trigger instructions in `AGENTS.md`.
+- Local closeout command in `Makefile` and `scripts/class_closeout_check.sh`.
 
 Completed assignments / notes reviewed:
 
@@ -66,8 +79,8 @@ Completed assignments / notes reviewed:
 | --- | --- | --- |
 | Class #002 | `assignments/class-002.md`, `notes/git-workflow.md` | Completed answers present; reviewed in gradebook. |
 | Flask testing subtopic | `notes/flask-testing-with-pytest.md`, `portfolio/backend/tests/` | Tests implemented and coverage verified. |
-| Class #013 | `notes/request-response-schemas.md`, `app/schemas/project_schema.py`, route/schema behavior through API coverage | Marshmallow learning objectives implemented and verified. |
-| Class #014 active work | `notes/repository-integration-testing.md`, `tests/repositories/test_project_repository.py`, `tests/services/test_project_service.py` | Repository and service tests added/strengthened, but class remains active because schema and error-handler test gaps remain. |
+| Class #013 | `notes/request-response-schemas.md`, schema implementation, API coverage | Marshmallow learning objectives implemented and verified. |
+| Class #019 active work | `notes/ci-foundations-github-actions.md`, `.github/workflows/backend-ci.yml` | Assignment reviewed and workflow checked locally; class remains active. |
 
 Notes verified:
 
@@ -85,27 +98,12 @@ Notes verified:
 - `notes/flask-testing-with-pytest.md`
 - `notes/request-response-schemas.md`
 - `notes/repository-integration-testing.md`
-
-Experiments verified:
-
-- `experiments/execution/hello.py`
-- `experiments/execution/hello.go`
-- `experiments/networking/http_request.py`
-
-Files created or modified by this progress check:
-
-- `PROGRESS.md`
-
-Working tree status before this progress update:
-
-- Clean.
+- `notes/test-architecture-and-factories.md`
+- `notes/schema-and-error-handler-testing.md`
+- `notes/coverage-strategy-and-test-quality.md`
+- `notes/ci-foundations-github-actions.md`
 
 ## Testing
-
-Testing requirement:
-
-- Testing is a core academy requirement.
-- Major backend features should have automated tests before being marked complete.
 
 Test framework:
 
@@ -117,8 +115,10 @@ Test framework:
 Test files:
 
 - `portfolio/backend/tests/conftest.py`
+- `portfolio/backend/tests/factories/project_factory.py`
 - `portfolio/backend/tests/integration/test_health_routes.py`
 - `portfolio/backend/tests/integration/test_project_routes.py`
+- `portfolio/backend/tests/repositories/test_error_handlers.py`
 - `portfolio/backend/tests/repositories/test_project_repository.py`
 - `portfolio/backend/tests/services/test_project_service.py`
 - `portfolio/backend/tests/unit/test_project_service.py`
@@ -126,69 +126,38 @@ Test files:
 Passing:
 
 - `portfolio/backend/.venv/bin/python -m pytest`
-  - Result: 57 collected, 57 passed in 11.91s.
+  - Result: 72 collected, 72 passed in 5.56s.
 - `portfolio/backend/.venv/bin/python -m pytest --cov=app --cov-report=term-missing`
-  - Result: 57 collected, 57 passed in 14.66s.
+  - Result: 72 collected, 72 passed in 8.18s.
+- From `portfolio/backend`: `.venv/bin/python -m pytest --cov=app --cov-branch --cov-report=term-missing --cov-fail-under=80`
+  - Result: 72 collected, 72 passed in 6.11s; required coverage floor reached.
+- `make class-check`
+  - Result: passed; ran document presence checks, Git status/history, generated artifact scan, whitespace check, backend pytest, coverage, CI-equivalent coverage, and Alembic current/head.
 
 Warnings:
 
-- 61 warnings from SQLAlchemy/Python deprecation: `datetime.datetime.utcnow()` is deprecated; use timezone-aware UTC values.
+- 70 warnings from SQLAlchemy/Python deprecation: `datetime.datetime.utcnow()` is deprecated; use timezone-aware UTC values.
 
 Failing or blocked:
 
-- No project verification commands are failing in the latest check.
-- An initial Alembic command was run with the wrong root-relative path from inside `portfolio/backend` and failed with `No such file or directory`; the command was rerun correctly and passed.
+- The root-level commands `portfolio/backend/.venv/bin/python -m alembic current` and `portfolio/backend/.venv/bin/python -m alembic heads` failed with `No 'script_location' key found in configuration` because Alembic was invoked from the academy root without using the backend `alembic.ini`.
+- The commands passed when rerun from `portfolio/backend`.
 
-Current test coverage:
+Current coverage:
 
-- Total coverage: 96%.
-- Coverage command status: passing.
+- Line coverage: 96%.
+- Branch-aware CI-equivalent coverage: 95.02%.
 
-Coverage details from latest clean run:
+Branch-aware coverage details from latest CI-equivalent run:
 
-| File | Coverage | Missing lines |
+| File | Coverage | Missing |
 | --- | ---: | --- |
-| `portfolio/backend/app/__init__.py` | 100% | None |
-| `portfolio/backend/app/config.py` | 100% | None |
-| `portfolio/backend/app/error_handlers.py` | 100% | None |
-| `portfolio/backend/app/exceptions.py` | 100% | None |
-| `portfolio/backend/app/extensions.py` | 100% | None |
-| `portfolio/backend/app/models/__init__.py` | 100% | None |
-| `portfolio/backend/app/models/project.py` | 100% | None |
-| `portfolio/backend/app/repositories/__init__.py` | 100% | None |
-| `portfolio/backend/app/repositories/project_repository.py` | 84% | 41-43, 50-52 |
-| `portfolio/backend/app/routes/__init__.py` | 100% | None |
-| `portfolio/backend/app/routes/health.py` | 100% | None |
-| `portfolio/backend/app/routes/home.py` | 80% | 7 |
-| `portfolio/backend/app/routes/info.py` | 80% | 8 |
-| `portfolio/backend/app/routes/project.py` | 97% | 65 |
-| `portfolio/backend/app/schemas/__init__.py` | 100% | None |
-| `portfolio/backend/app/schemas/project_schema.py` | 95% | 51, 96, 104 |
-| `portfolio/backend/app/services/__init__.py` | 100% | None |
-| `portfolio/backend/app/services/project_service.py` | 100% | None |
-| Total | 96% | 12 missed statements |
-
-Commands run:
-
-- `git status --short`
-- `git log --oneline --decorate -10`
-- `git log -1 --format=%H%n%h%n%ad%n%s --date=iso-strict`
-- `git ls-files | grep -E '\.venv|__pycache__|\.pytest_cache|htmlcov|\.coverage'`
-- `git ls-files .coverage portfolio/backend/.coverage portfolio/backend/.pytest_cache portfolio/backend/htmlcov | sort`
-- `find . -path './.git' -prune -o -path './portfolio/backend/.venv' -prune -o -type f -print | sort`
-- `find portfolio/backend/tests -type f -not -path '*/__pycache__/*' -print | sort`
-- `rg -n "Project.*Schema|Marshmallow|error_handler|handle_.*error|schema" portfolio/backend/tests -g '!**/__pycache__/**'`
-- `sed -n '1,260p' COURSE_TRACKER.md`
-- `sed -n '1,260p' PROJECT_STATE.md`
-- `sed -n '1,320p' PROGRESS.md`
-- `sed -n '1,360p' portfolio/backend/tests/services/test_project_service.py`
-- `sed -n '1,260p' portfolio/backend/app/models/project.py`
-- `sed -n '1,220p' portfolio/backend/app/schemas/project_schema.py`
-- `portfolio/backend/.venv/bin/python -m pytest`
-- `portfolio/backend/.venv/bin/python -m pytest --cov=app --cov-report=term-missing`
-- `portfolio/backend/.venv/bin/python -m alembic current`
-- `portfolio/backend/.venv/bin/python -m alembic heads`
-- `date --iso-8601=seconds`
+| `app/repositories/project_repository.py` | 85% | 41-43, 50-52 |
+| `app/routes/home.py` | 80% | 7 |
+| `app/routes/info.py` | 80% | 8 |
+| `app/routes/project.py` | 95% | 65 |
+| `app/schemas/project_schema.py` | 93% | 47->44, 51, 100->94, 104 |
+| Total | 95% | 11 missed statements, 5 partial branches |
 
 ## Database And Migrations
 
@@ -210,77 +179,74 @@ Database migrations created:
 
 Alembic current:
 
-- `d9a2cc141e6a (head)`
+- From `portfolio/backend`: `d9a2cc141e6a (head)`
 
 Alembic head:
 
-- `d9a2cc141e6a (head)`
+- From `portfolio/backend`: `d9a2cc141e6a (head)`
 
 Pending migrations:
 
-- None detected by `alembic current` and `alembic heads`; current revision matches head.
+- None detected when Alembic is run from the backend directory; current revision matches head.
+
+## Commands Run In Latest Verification
+
+- `git status --short`
+- `git log --oneline --decorate -10`
+- `git ls-files | grep -E '\.venv|__pycache__|\.pytest_cache|htmlcov|\.coverage'`
+- `portfolio/backend/.venv/bin/python -m pytest`
+- `portfolio/backend/.venv/bin/python -m pytest --cov=app --cov-report=term-missing`
+- `portfolio/backend/.venv/bin/python -m alembic current`
+- `portfolio/backend/.venv/bin/python -m alembic heads`
+- From `portfolio/backend`: `.venv/bin/python -m alembic current`
+- From `portfolio/backend`: `.venv/bin/python -m alembic heads`
+- From `portfolio/backend`: `.venv/bin/python -m pytest --cov=app --cov-branch --cov-report=term-missing --cov-fail-under=80`
+- Repository inspection commands using `sed`, `find`, `rg`, `nl`, and `git show`
+- `make class-check`
 
 ## Unresolved Issues
 
-Issue: `.coverage` is tracked by Git.
+Issue: Root-level `.coverage` is tracked by Git.
 
-- Cause: `git ls-files | grep -E '\.venv|__pycache__|\.pytest_cache|htmlcov|\.coverage'` returned `.coverage`.
+- Evidence: `git ls-files | grep -E '\.venv|__pycache__|\.pytest_cache|htmlcov|\.coverage'` returned `.coverage`.
+- Impact: Running coverage from the academy root modifies a tracked generated file.
 - Suggested next action: Remove it from Git tracking with an index-only cleanup and keep coverage artifacts ignored.
+
+Issue: Class numbering mismatch.
+
+- Evidence: `MASTER_SYLLABUS.md` lists Class #019 as Code Quality Tooling and Class #020 as Continuous Integration, but the learner reports Class #019 and the latest note is CI Foundations with GitHub Actions.
+- Suggested next action: Decide whether to revise `MASTER_SYLLABUS.md` or renumber the CI foundations note/workflow evidence.
 
 Issue: No-op Alembic migration exists.
 
-- Cause: `portfolio/backend/migrations/versions/7b11003d2c3a_.py` has message `empty message` and `pass` in upgrade/downgrade.
+- Evidence: `portfolio/backend/migrations/versions/7b11003d2c3a_.py` has message `empty message` and no-op upgrade/downgrade functions.
 - Suggested next action: Leave it if already applied in shared history, but avoid creating empty migrations in future classes.
 
 Issue: Deprecation warnings in test run.
 
-- Cause: `datetime.datetime.utcnow()` is used by SQLAlchemy defaults in `app/models/project.py`.
+- Evidence: `datetime.datetime.utcnow()` is used by SQLAlchemy defaults in `app/models/project.py`.
 - Suggested next action: Move to timezone-aware UTC timestamps, then rerun tests and Alembic checks.
 
 ## Technical Debt
 
-- Repository rollback test exists but should be reviewed for realistic SQLAlchemy/database failure behavior.
-- Database constraint tests are still incomplete.
-- Lower coverage in repository layer: `project_repository.py` is 84%.
-- Lower coverage in home/info routes: `home.py` and `info.py` are 80%.
-- Direct schema unit tests are not yet present; current schema behavior is mostly covered through API tests.
-- Direct error-handler test search returned no matches in `portfolio/backend/tests`.
-- CI pipeline.
-- Debug `print()` remains in `ProjectUpdateSchema.validate_and_normalize`.
-- The repository name in the academy instructions, `engineering-journey-platform`, does not match the verified local Git directory name, `academy`.
+- `ProjectUpdateSchema.validate_and_normalize()` still contains debug `print()` output.
+- Direct schema unit tests for `ProjectCreateSchema`, `ProjectUpdateSchema`, and `ProjectResponseSchema` are not clearly present as standalone tests.
+- Lower coverage remains in repository failure branches, home/info routes, and one project route branch.
+- The local repository directory name `academy` does not match the requested repository name `engineering-journey-platform`.
 
-## Latest Git Commit
+## Latest Git History
 
-- Full SHA: `7d60846f7081a26c2886b234f8ef79343db674dc`
-- Short SHA: `7d60846`
-- Date: `2026-08-13T20:31:33+01:00`
-- Subject: `test: strengthen project service unit tests`
-
-Recent history:
-
-- `7d60846 (HEAD -> master) test: strengthen project service unit tests`
+- `baa0b75 (HEAD -> master, origin/master) docs: completed my assignment for ci foundation class #019`
+- `28a3b5d ci: add backend test workflow`
+- `3b3d938 ci: add backend test workflow`
+- `36f0d26 refactor: organize test architecture and factories`
+- `7d60846 test: strengthen project service unit tests`
 - `9974dd1 docs: Graded for class #014`
 - `c1e6b6e test: added tests for project_repository`
 - `615af46 feat: add project request and response schemas`
 - `db317b4 chore: upgraded codex to a teaching assistant.`
 - `d36134b chore: stop tracking virtual environment`
-- `1728398 test: add Flask service and API tests`
-- `5bb199d refactor: centralize API error handling`
-- `050fd7f feat: add project service layer and CRUD endpoints`
-- `ef3fb28 feat: implement repository pattern for project data access`
 
 ## Next Recommended Step
 
-Next class:
-
-- Continue Class #014 - Testing the Layered Flask Architecture.
-
-Preparation required:
-
-- Add direct schema tests for `ProjectCreateSchema`, `ProjectUpdateSchema`, and `ProjectResponseSchema`.
-- Add error-handler tests for Marshmallow validation errors, HTTP exceptions, app errors, and unexpected errors.
-- Strengthen database constraint tests.
-- Remove debug `print()` from schema validation.
-- Replace deprecated `datetime.utcnow` defaults with timezone-aware UTC values.
-- Remove tracked `.coverage` from Git.
-- Keep `pytest --cov=app --cov-report=term-missing` passing.
+Continue Class #019 by resolving the syllabus numbering mismatch, then commit the CI workflow typo fix, class closeout automation, and Class #019 review/state updates.

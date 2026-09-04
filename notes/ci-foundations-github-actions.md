@@ -38,3 +38,50 @@ Explain in your own words:
 
     What kinds of bugs can CI reveal that local development may hide?
         Continuous Integration (CI) catches critical bugs that stay hidden during local development because local machines suffer from a phenomenon known as "it works on my machine." Local environments naturally accumulate unique configurations, manual fixes, and leftover files that hide systemic coding issues.
+
+## Instructor Review - Class #019 CI Foundations
+
+Reviewed: 2026-09-04
+
+Score:
+
+- Technical correctness: 34/40
+- Understanding: 26/30
+- Completeness: 18/20
+- Engineering practices: 9/10
+- Overall: 87/100
+
+What is strong:
+
+- You correctly identify CI as an automated safety check around frequent code integration.
+- You understand GitHub Actions vocabulary: workflow, event, job, step, and runner.
+- You correctly explain that CI should use a fresh environment instead of local state.
+- You correctly explain why CI must not depend on `instance/project.sql`.
+- You connect pytest failure to process exit codes, which is an important engineering detail.
+
+Corrections:
+
+- CI does not literally merge code by itself. CI runs automated checks when code is pushed, a pull request is opened or updated, or another configured event fires. Merging is a developer or repository-policy decision that may depend on CI passing.
+- "CI vs deployment" is mostly correct, but be precise: deployment means releasing or installing software into an environment. Continuous Deployment is only one automated deployment style.
+- "pytest returns exit code 1" is a useful example, but the safer rule is: pytest returns a non-zero exit code when the test run fails, and GitHub Actions treats any non-zero command exit code as a failed step.
+- "It works on my machine" is a good phrase, but the deeper reason is environment drift: different Python versions, missing dependencies, uncommitted files, hidden local databases, cached state, and operating system differences.
+
+Improved answer:
+
+```text
+Continuous Integration is the practice of automatically running checks, such as installation, tests, linting, and coverage, whenever code changes are pushed or proposed. CI gives the team fast feedback before code is trusted or merged.
+
+CI is not the same as deployment. CI proves that the codebase can be built and tested in a clean environment. Deployment releases the application to an environment such as staging or production.
+
+GitHub Actions runs workflows from YAML files. A workflow starts from an event, contains one or more jobs, and each job runs ordered steps on a runner.
+
+pytest communicates failure through its process exit code. If pytest returns any non-zero exit code, GitHub Actions marks that step and job as failed.
+
+CI must not use `instance/project.sql` because that is local development state. CI should create its own clean test database so the result is reproducible.
+```
+
+Practice tasks:
+
+- Add one sentence explaining why `pull_request` CI is especially useful before merging.
+- Explain what would happen if `pip install -r requirements.txt` fails in CI.
+- Explain why a CI workflow should run from committed files only, not files that happen to exist locally.

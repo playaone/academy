@@ -1,6 +1,6 @@
 # Engineering Journey Academy Gradebook
 
-Last updated: 2026-08-12T01:58:27+01:00
+Last updated: 2026-09-04
 
 ## Summary
 
@@ -9,12 +9,13 @@ Last updated: 2026-08-12T01:58:27+01:00
 | #002 | Git workflow | 68 | 74 | 60 | 65 | 68 |
 | Subtopic | Flask testing with pytest | 78 | 86 | 90 | 76 | 84 |
 | #013 | Request Validation and Response Schemas with Marshmallow | 82 | 86 | 82 | 80 | 84 |
+| #019 | CI Foundations with GitHub Actions | 87 | 84 | 95 | 86 | 87 |
 
-Current average score, numbered completed classes only: 76
+Current average score, numbered reviewed classes only: 80
 
-Current average score, including reviewed subtopics: 79
+Current average score, including reviewed subtopics: 82
 
-Highest score: 84 - Flask testing subtopic and Class #013
+Highest score: 87 - Class #019, CI Foundations with GitHub Actions
 
 Lowest score: 68 - Class #002, Git workflow
 
@@ -22,27 +23,25 @@ Most improved topic: Testing discipline and verification habits
 
 Weakest topic: Written technical explanations
 
-Strongest topic: Flask API testing and request validation
+Strongest topic: Flask API testing, request validation, and CI concepts
 
 Current engineering level: Early backend apprentice moving toward junior-backend readiness
 
-Confidence level for continuing Class #014: Medium-high. The test suite is healthy, but layered test gaps remain.
+Confidence level for continuing Class #019: Medium-high. The backend CI workflow runs the right local command, but the syllabus numbering mismatch should be resolved before marking the class complete.
 
 Review priority list:
 
 - Explain concepts with more precision and less shorthand.
-- Add direct schema tests.
-- Add error-handler tests.
-- Strengthen repository rollback and database constraint tests.
-- Increase coverage for repository, error-handler, home, and info route modules.
-- Add CI when the testing workflow stabilizes.
+- Explain concepts with precise boundaries, especially CI versus merging and CI versus deployment.
+- Fix lingering backend technical debt: debug schema output and UTC deprecation warnings.
+- Remove tracked coverage artifacts from Git.
+- Resolve the Class #019/#020 syllabus mismatch.
 
 Knowledge gap list:
 
-- Difference between code coverage and behavioral completeness.
-- Database constraints and realistic transaction rollback verification.
-- Cleaner separation of request validation, service rules, and serialization.
-- Marshmallow edge cases and direct schema unit testing.
+- Difference between CI checks, merge policy, deployment, and continuous deployment.
+- Difference between local environment state and reproducible CI state.
+- Cleaner wording around process exit codes and failed CI steps.
 - More precise Git terminology around commits, branches, and commit message conventions.
 
 ## Class #002 Review - Git Workflow
@@ -234,3 +233,42 @@ Next review requirements:
 - Add error-handler tests.
 - Strengthen rollback and constraint tests.
 - Keep `pytest --cov=app --cov-report=term-missing` passing.
+
+## Class #019 Review - CI Foundations With GitHub Actions
+
+Status: Active, reviewed but not marked complete.
+
+Evidence reviewed:
+
+- `notes/ci-foundations-github-actions.md`
+- `.github/workflows/backend-ci.yml`
+- `portfolio/backend/.venv/bin/python -m pytest`
+- `portfolio/backend/.venv/bin/python -m pytest --cov=app --cov-report=term-missing`
+- `.venv/bin/python -m pytest --cov=app --cov-branch --cov-report=term-missing --cov-fail-under=80` from `portfolio/backend`
+- Alembic current/head from `portfolio/backend`
+
+Score breakdown:
+
+- Technical correctness: 34/40
+- Understanding: 26/30
+- Completeness: 18/20
+- Engineering practices: 9/10
+- Overall: 87/100
+
+What is correct:
+
+- The note explains CI, GitHub Actions workflow pieces, fresh environments, pytest failure signaling, and why CI must not depend on `instance/project.sql`.
+- The workflow installs dependencies from `portfolio/backend/requirements.txt`.
+- The workflow runs pytest with coverage and a coverage floor.
+- The local CI-equivalent command passed with 72 tests and 95.02% branch-aware total coverage.
+
+What needs correction:
+
+- CI runs checks; it does not merge code by itself.
+- Deployment and Continuous Deployment should not be treated as exactly the same idea.
+- pytest failure should be described as a non-zero exit code, not only exit code 1.
+- `MASTER_SYLLABUS.md` still lists Class #019 as Code Quality Tooling and Class #020 as Continuous Integration, while the latest learner note calls Class #019 CI Foundations.
+
+Current provisional result:
+
+- Strong pass on the written CI foundations assignment, but Class #019 should remain active until the syllabus mismatch is resolved and the workflow is committed after review.

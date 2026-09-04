@@ -1,10 +1,11 @@
 # Engineering Journey Academy — Course Tracker
 
-**Curriculum version:** 1.0.0  
-**Status:** Active  
-**Current class:** #014  
-**Last completed class:** #013  
-**Next class:** #014 — Testing the Layered Flask Architecture
+**Curriculum version:** 1.0.0
+**Status:** Active
+**Current class:** #019
+**Last fully verified completed class:** #013
+**Backfill verification needed:** #014-#018
+**Next class:** #019 — CI Foundations with GitHub Actions
 
 ## Completed classes
 
@@ -21,6 +22,13 @@
 - [x] #011 Service Layer
 - [x] #012 Global Error Handling and Safe Database Rollbacks
 - [x] #013 Request Validation and Response Schemas with Marshmallow
+- [ ] #019 CI Foundations with GitHub Actions
+
+## Learner-reported current position
+
+The learner reports being on Class #019. Repository evidence exists for work after Class #013, including layered tests, factories, schema/error-handler testing notes, coverage strategy notes, and CI workflow work.
+
+Do not mark Classes #014-#018 complete until each class has been verified against its implementation, notes or assignment evidence, tests, coverage, and migration state.
 
 ## Existing unnumbered/sub-topic knowledge
 
@@ -45,6 +53,17 @@ The Flask backend includes:
 - Global error handlers
 - Marshmallow request and response schemas
 - Existing pytest infrastructure
+- Layered test organization and project test factories
+- Schema and error-handler tests
+- Branch-aware coverage command for CI
+- Backend GitHub Actions workflow
+- Local class closeout trigger: `make class-check`
+
+## Current curriculum note
+
+The learner reports the current class as #019, and the latest repository evidence is `notes/ci-foundations-github-actions.md` plus `.github/workflows/backend-ci.yml`.
+
+`MASTER_SYLLABUS.md` still lists #019 as Code Quality Tooling and #020 as Continuous Integration. Resolve that syllabus mismatch before marking Class #019 complete.
 
 ## Continuation rule
 
