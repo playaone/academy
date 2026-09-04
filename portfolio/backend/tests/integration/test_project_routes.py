@@ -265,7 +265,37 @@ def test_missing_route_returns_HTTPException(client):
             "message": "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."
         }
     }
-            
+    
+    
+def test_create_project_reports_multiple_schema_errors(client):
+    response = create_project_via_api(
+        client,
+        github_url="not-a-url",
+        website_url="not-a-url"
+    )
+    
+    data = response.get_json()
+    assert response.status_code == 400
+    
+    details = data["error"]["details"]
+    
+    assert "github_url" in details
+    assert "website_url" in details
+    
+
+def test_create_project_rejects_invalid_github_url(client):
+    response = create_project_via_api(
+        client,
+        title="Portfolio",
+        description="My protfolio",
+        github_url="definitely-not-a-url"
+    )
+    
+    data = response.get_json()
+    
+    assert response.status_code == 400
+    assert "github_url" in data['error']['details']
+
 
 @patch("app.routes.project.service.get_project")
 def test_catches_internal_server_error_for_unknown_operations(mock_get_project, client):
@@ -279,3 +309,60 @@ def test_catches_internal_server_error_for_unknown_operations(mock_get_project, 
     
     assert data['error']['code'] == "internal_server_error"
     assert data['error']['message'] == "An unexpected error occured"
+    
+
+def test_description_accepts_maximum_length(client):
+    response = create_project_via_api(client, description="a" * 2000)
+    assert response.status_code == 201
+    
+    
+def test_description_rejects_above_maximum_length(client):
+    response = create_project_via_api(client, description="a" * 2001)
+    
+    data = response.get_json()
+    
+    assert response.status_code == 400
+    assert "description" in data['error']['details']
+    
+    
+@pytest.mark.parametrize(
+    ("length", "expected_status"),
+    [
+        (1999, 201),
+        (2000, 201),
+        (2001, 400)
+    ]
+)
+def test_project_description_length(client, length, expected_status):
+    response = create_project_via_api(client, description="a" * length)
+    
+    assert response.status_code == expected_status
+    
+    
+def test_patch_accepts_single_field(client):
+    created = create_project_via_api(client)
+    
+    project_id = created.get_json()['id']
+    
+    response = client.patch(f"/projects/{project_id}", json={"description": "updated"})
+    
+    assert response.status_code == 200
+    
+
+def test_patch_rejects_empty_object(client):
+    response = client.post("/projects", json={})
+    
+    assert response.status_code == 400
+    
+    data = response.get_json()
+    
+    assert data['error']['code'] == "validation_error"
+    
+
+def test_create_project_rejects_invalid_json(client):
+    response = client.post("/projects", data="{'title':", content_type="application/json")
+    
+    data = response.get_json()
+    
+    assert response.status_code == 400
+    assert data['error']['code'] == "validation_error"
