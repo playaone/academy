@@ -1,19 +1,23 @@
+from datetime import datetime
+
 from app.extensions import db
-from datetime import datetime, UTC
+
 
 class Project(db.Model):
     __tablename__ = "projects"
-    
+
     id = db.Column(db.Integer, primary_key=True)
-    
+
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
     github_url = db.Column(db.String(255), nullable=True)
     website_url = db.Column(db.String(255), nullable=True)
     technologies = db.Column(db.String(500), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+    updated_at = db.Column(
+        db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
+
     # def to_dict(self):
     #     return {
     #         "id": self.id,
@@ -24,7 +28,7 @@ class Project(db.Model):
     #         "technologies": self.technologies,
     #         "created_at": (
     #             self.created_at.isoformat()
-    #             if self.created_at 
+    #             if self.created_at
     #            else None
     #         ),
     #         "updated_at": (
@@ -33,4 +37,3 @@ class Project(db.Model):
     #             else None
     #         )
     #     }
-        

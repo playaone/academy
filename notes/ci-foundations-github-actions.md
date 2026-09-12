@@ -83,5 +83,10 @@ CI must not use `instance/project.sql` because that is local development state. 
 Practice tasks:
 
 - Add one sentence explaining why `pull_request` CI is especially useful before merging.
+    Pull request CI is especially useful before merging because it automatically runs tests, linting, and builds against the proposed changes in isolation, catching bugs and failures early so broken code never reaches the main branch.
+
 - Explain what would happen if `pip install -r requirements.txt` fails in CI.
+    If `pip install -r requirements.txt` fails in CI, the step exits with a non-zero status code, the CI job (and usually the entire workflow) is marked as **failed**, subsequent steps are typically skipped, the pull request shows a failed check, and merging is blocked if branch protection requires passing CI.
+
 - Explain why a CI workflow should run from committed files only, not files that happen to exist locally.
+    A CI workflow should run only from committed files because that is the only way to guarantee the checks are reproducible, consistent, and trustworthy: CI must test exactly what is in the repository (and will be merged or deployed), not any uncommitted, untracked, or locally modified files that exist only on a developer’s machine.
