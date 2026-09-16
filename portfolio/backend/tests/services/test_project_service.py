@@ -96,7 +96,7 @@ def test_get_project(service):
     assert project is created
 
 
-def test_get_project(service):
+def test_get_update_project_description(service):
     created = service.create_project(dummy)
 
     updated = service.update_project(created.id, {"description": "Updated description"})

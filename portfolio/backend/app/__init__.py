@@ -1,9 +1,6 @@
-from dotenv import load_dotenv
 from flask import Flask
 
-load_dotenv()
-
-from app import models
+import app.models  # noqa: F401
 from app.config import Config
 from app.error_handlers import register_error_handlers
 from app.extensions import db

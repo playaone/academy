@@ -243,7 +243,9 @@ def test_missing_route_returns_HTTPException(client):
     assert data == {
         "error": {
             "code": "not_found",
-            "message": "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.",
+            "message": "The requested URL was not found on the server. "
+            "If you entered the URL manually please check your "
+            "spelling and try again.",
         }
     }
 
