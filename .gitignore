@@ -21,3 +21,6 @@ venv/
 AGENTS.md
 Makefile
 scripts/
+
+.env
+.env.local
