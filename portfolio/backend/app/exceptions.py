@@ -27,3 +27,8 @@ class ConflictError(ApplicationError):
 class UnsupportedFieldError(ApplicationError):
     status_code = 400
     error_code = "unsupported_field"
+
+
+class AuthenticationError(ApplicationError):
+    status_code = 401
+    error_code = "authentication_error"

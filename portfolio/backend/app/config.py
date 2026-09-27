@@ -31,6 +31,9 @@ class Config:
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    JWT_ALGORITHM = "HS256"
+    JWT_SECRET_KEY = "my-jwt-secret-key"
+
 
 class TestConfig(Config):
     TESTING = True
